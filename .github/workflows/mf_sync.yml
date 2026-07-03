@@ -1,0 +1,20 @@
+name: Sync to Hugging Face Spaces
+
+on:
+  push:
+    branches: [main] # Change this to 'master' if your main branch uses that name
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Push to Hub
+        env:
+          MF_TOKEN: ${{ secrets.MF_TOKEN }}
+        run: git push --force https://YOUR_MF_USERNAME:$MF_TOKEN@huggingface.co/spaces/thelivelyguy/mutual_fund_faq main
