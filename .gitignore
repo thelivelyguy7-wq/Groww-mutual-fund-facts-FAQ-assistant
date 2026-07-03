@@ -7,7 +7,6 @@ env/
 .venv/
 
 # Data Directories
-data/chroma_db/
 data/raw/
 data/processed/
 
