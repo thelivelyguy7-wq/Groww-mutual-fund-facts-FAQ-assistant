@@ -1,3 +1,12 @@
+--
+title: Mutual Fund FAQ
+emoji: ??
+colorFrom: green
+colorTo: blue
+sdk: docker
+pinned: false
+---
+
 # Mutual Fund FAQ Assistant (Facts-Only RAG)
 
 A highly constrained, strictly compliant Retrieval-Augmented Generation (RAG) system built to answer factual queries about HDFC Mutual Funds using live data from Groww.
@@ -63,3 +72,4 @@ The frontend features a hardcoded, highly visible disclaimer banner to ensure co
     ⚠️ Disclaimer: Facts-only. No investment advice.
 </div>
 ```
+
