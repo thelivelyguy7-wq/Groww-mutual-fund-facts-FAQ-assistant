@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  rag_bot:
+    build: .
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1

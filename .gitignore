@@ -1,0 +1,23 @@
+# Environment variables
+.env
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Data Directories
+data/chroma_db/
+data/raw/
+data/processed/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# IDEs
+.vscode/
+.idea/
+
+# Agents
+.agents/

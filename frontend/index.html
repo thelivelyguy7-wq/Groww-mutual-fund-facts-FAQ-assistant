@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Mutual Fund AI - FAQ Assistant</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#c7c6c6",
+                        "secondary": "#5f5e5e",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#474646",
+                        "primary-fixed-dim": "#2fe0aa",
+                        "tertiary": "#5e5e5e",
+                        "inverse-primary": "#2fe0aa",
+                        "on-primary-container": "#00533c",
+                        "surface": "#f8f9fa",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f3f4f5",
+                        "primary-fixed": "#59fdc5",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "surface-container-highest": "#e1e3e4",
+                        "secondary-container": "#e5e2e1",
+                        "on-surface": "#191c1d",
+                        "tertiary-fixed": "#e3e2e2",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#00d09c",
+                        "primary": "#006c4f",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "background": "#f8f9fa",
+                        "outline": "#6b7b72",
+                        "outline-variant": "#bacac1",
+                        "on-surface-variant": "#3c4a43",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-primary-fixed-variant": "#00513b",
+                        "surface-container": "#edeeef",
+                        "surface-dim": "#d9dadb",
+                        "surface-variant": "#e1e3e4",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-tint": "#006c4f",
+                        "on-tertiary-container": "#484848",
+                        "on-primary-fixed": "#002116",
+                        "tertiary-container": "#b8b7b7",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-error-container": "#93000a",
+                        "on-primary": "#ffffff",
+                        "on-background": "#191c1d",
+                        "on-tertiary-fixed": "#1b1c1c",
+                        "on-secondary-container": "#656464"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "margin-desktop": "40px",
+                        "sidebar-width": "320px",
+                        "chat-max-width": "800px",
+                        "stack-gap": "12px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .dot-flashing {
+            position: relative;
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background-color: #006c4f;
+            animation: dot-flashing 1s infinite linear alternate;
+            animation-delay: .5s;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+        }
+        .dot-flashing::before {
+            left: -12px;
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background-color: #006c4f;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 0s;
+        }
+        .dot-flashing::after {
+            left: 12px;
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background-color: #006c4f;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 1s;
+        }
+        @keyframes dot-flashing {
+            0% { background-color: #006c4f; }
+            50%, 100% { background-color: rgba(0, 108, 79, 0.2); }
+        }
+        
+        .chat-container::-webkit-scrollbar { width: 6px; }
+        .chat-container::-webkit-scrollbar-thumb { background-color: #e5e2e1; border-radius: 3px; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Markdown Styles */
+        .markdown a { color: #006c4f; text-decoration: underline; }
+        .markdown p { margin-bottom: 0.5rem; }
+        .markdown p:last-child { margin-bottom: 0; }
+        .markdown ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 0.5rem; }
+        .markdown table { border-collapse: collapse; width: 100%; margin-bottom: 0.5rem; }
+        .markdown th, .markdown td { border: 1px solid #e5e7eb; padding: 0.25rem 0.5rem; text-align: left; }
+        .markdown em { font-size: 0.85rem; color: #6b7280; font-style: normal; display: block; margin-top: 0.75rem; border-top: 1px solid #e5e7eb; padding-top: 0.5rem; }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface h-screen overflow-hidden flex selection:bg-primary-container selection:text-on-primary-container">
+    <div id="root" class="w-full h-full"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        function App() {
+            const [messages, setMessages] = useState([]);
+            const [inputValue, setInputValue] = useState('');
+            const [isLoading, setIsLoading] = useState(false);
+            const messagesEndRef = useRef(null);
+            const textareaRef = useRef(null);
+
+            const suggestionPills = [
+                "What is the exit load for HDFC Small Cap?",
+                "Compare ELSS vs Index Funds",
+                "How to redeem mutual funds?"
+            ];
+
+            const scrollToBottom = () => {
+                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            };
+
+            useEffect(() => {
+                scrollToBottom();
+            }, [messages, isLoading]);
+
+            const adjustTextareaHeight = () => {
+                if(textareaRef.current) {
+                    textareaRef.current.style.height = 'auto';
+                    textareaRef.current.style.height = (textareaRef.current.scrollHeight < 120 ? textareaRef.current.scrollHeight : 120) + 'px';
+                }
+            };
+
+            const handleInput = (e) => {
+                setInputValue(e.target.value);
+                adjustTextareaHeight();
+            };
+
+            const sendMessage = async (text) => {
+                if (!text.trim()) return;
+                
+                const userMsg = { role: 'user', content: text };
+                setMessages(prev => [...prev, userMsg]);
+                setInputValue('');
+                if(textareaRef.current) {
+                    textareaRef.current.style.height = 'auto';
+                }
+                setIsLoading(true);
+
+                try {
+                    const response = await fetch('http://localhost:8000/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ query: text })
+                    });
+                    
+                    const data = await response.json();
+                    setMessages(prev => [...prev, { role: 'assistant', content: data.answer }]);
+                } catch (error) {
+                    setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I encountered a network error connecting to the API.' }]);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                sendMessage(inputValue);
+            };
+
+            const handleKeyDown = (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage(inputValue);
+                }
+            };
+
+            const renderMarkdown = (content) => {
+                if (!content) content = '';
+                return { __html: marked.parse(content) };
+            };
+
+            return (
+                <div className="flex w-full h-full">
+                    {/* Sidebar */}
+                    <nav className="w-sidebar-width h-screen hidden md:flex flex-col bg-surface-container-lowest dark:bg-surface-dim border-r border-outline-variant dark:border-outline fixed left-0 top-0 z-40">
+                        <div className="p-6">
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center overflow-hidden">
+                                    <img alt="User Profile" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmLX3jJpM0JNSvJuyb3vttUc0OayENer0hrApP8gAcl_QA9ZiQmr7LHqj5fX4IWFsKF9gbOp_zVPZOF_ew2biNHJ0WU50vJluCUM2UAbzIdEZrIYQon0b3wMr1bt3POj502ls32XSuOJM2IyD7bfz4kABNbRKzkeFEraMOhtgSfa2iznIgf25rQVT0pQkgIe6QDTy0BbjOGEmLFZY7Wzxr--Gi2hw4vpRNx5WxVCnRxuQuPz8q3fUR" />
+                                </div>
+                                <div>
+                                    <h1 className="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">Groww</h1>
+                                    <p className="font-label-sm text-label-sm text-on-surface-variant">Expert Assistant</p>
+                                </div>
+                            </div>
+                            <button onClick={() => setMessages([])} className="w-full py-3 px-4 mb-6 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary font-label-md text-label-md flex items-center justify-center gap-2 transition-colors">
+                                <span className="material-symbols-outlined">delete</span>
+                                Clear History
+                            </button>
+                            <div className="flex flex-col gap-2 flex-grow">
+                                <a className="flex items-center gap-3 py-3 px-4 rounded-lg text-primary dark:text-primary-fixed-dim font-bold border-l-4 border-primary dark:border-primary-fixed-dim bg-surface-container-low dark:bg-surface-container-high transition-colors" href="#">
+                                    <span className="material-symbols-outlined">add_comment</span>
+                                    <span className="font-label-md text-label-md">New Chat</span>
+                                </a>
+                                <a className="flex items-center gap-3 py-3 px-4 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" href="#">
+                                    <span className="material-symbols-outlined">trending_up</span>
+                                    <span className="font-label-md text-label-md">Market Trends</span>
+                                </a>
+                                <a className="flex items-center gap-3 py-3 px-4 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" href="#">
+                                    <span className="material-symbols-outlined">account_balance</span>
+                                    <span className="font-label-md text-label-md">Tax Savers</span>
+                                </a>
+                                <a className="flex items-center gap-3 py-3 px-4 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" href="#">
+                                    <span className="material-symbols-outlined">analytics</span>
+                                    <span className="font-label-md text-label-md">Portfolio Analysis</span>
+                                </a>
+                                <a className="flex items-center gap-3 py-3 px-4 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" href="#">
+                                    <span className="material-symbols-outlined">settings</span>
+                                    <span className="font-label-md text-label-md">Settings</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div className="mt-auto p-6 border-t border-outline-variant dark:border-outline">
+                            <div className="flex flex-col gap-2">
+                                <a className="flex items-center gap-3 py-2 px-4 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+                                    <span className="material-symbols-outlined text-sm">info</span>
+                                    <span className="font-label-sm text-label-sm">Risk Guide</span>
+                                </a>
+                                <a className="flex items-center gap-3 py-2 px-4 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+                                    <span className="material-symbols-outlined text-sm">gavel</span>
+                                    <span className="font-label-sm text-label-sm">Legal</span>
+                                </a>
+                            </div>
+                        </div>
+                    </nav>
+
+                    {/* Main Content Area */}
+                    <div className="flex-1 flex flex-col md:ml-[320px] h-full relative">
+                        {/* Header */}
+                        <header className="fixed top-0 right-0 w-full md:w-[calc(100%-320px)] z-30 flex justify-between items-center px-4 md:px-8 h-16 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline transition-all duration-200">
+                            <div className="flex items-center gap-4">
+                                <button className="md:hidden text-on-surface-variant">
+                                    <span className="material-symbols-outlined">menu</span>
+                                </button>
+                                <div className="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">Mutual Fund AI</div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <button className="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-colors">
+                                    <span className="material-symbols-outlined">history</span>
+                                </button>
+                                <button className="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-colors">
+                                    <span className="material-symbols-outlined">help_outline</span>
+                                </button>
+                                <div className="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden ml-2 cursor-pointer border border-outline-variant">
+                                    <img alt="User Avatar" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8AP7kVgh2wY13xIlh-JpH91U3Z7t3HJQOtyBiPs3CL3RgR7Xcxq0Xjk8uY99-9msihpQLhMURXqQwJRyFMhQjLUnwLLw6lfjnQQcRCKuXPyl39uu74MmtkjASZlVE6Wj-l3UiPJrfUDBjFeXxlXVjQJ_uRVoWNTu4wf1Go0Ln80wwrZDnJXXOdBpjUvvOIerwNaOa0ypx58OzK9cZfxNXo1aDiHPcb9PDm8oPfTqIeZKsYM4NQxTW" />
+                                </div>
+                            </div>
+                        </header>
+
+                        {/* Disclaimer Banner */}
+                        <div className="fixed top-16 right-0 w-full md:w-[calc(100%-320px)] z-20 bg-[#FFFBEB] border-l-4 border-error border-b border-outline-variant p-3 px-4 md:px-8 flex items-center gap-3">
+                            <span className="material-symbols-outlined text-error">warning</span>
+                            <p className="font-label-md text-label-md text-on-surface">⚠️ Disclaimer: Facts-only. No investment advice.</p>
+                        </div>
+
+                        {/* Chat Interface */}
+                        <main className="flex-1 flex flex-col pt-32 pb-28 overflow-hidden relative">
+                            <div className="flex-1 overflow-y-auto px-4 md:px-gutter py-6 chat-container flex flex-col gap-6 w-full max-w-[800px] mx-auto">
+                                
+                                {messages.length === 0 ? (
+                                    <div className="flex-1 flex flex-col items-center justify-center text-center max-w-2xl mx-auto h-full">
+                                        <div className="w-16 h-16 bg-surface-container rounded-2xl flex items-center justify-center mb-6 text-primary">
+                                            <span className="material-symbols-outlined text-3xl">auto_awesome</span>
+                                        </div>
+                                        <h2 className="font-headline-lg text-headline-lg mb-4">How can I help you navigate mutual funds today?</h2>
+                                        <p className="font-body-md text-body-md text-on-surface-variant mb-10">Ask me anything about schemes, performance metrics, or market basics.</p>
+                                        <div className="flex flex-wrap justify-center gap-3">
+                                            {suggestionPills.map((pill, idx) => (
+                                                <button key={idx} onClick={() => sendMessage(pill)} className="suggestion-pill px-5 py-3 rounded-xl border border-outline-variant bg-surface hover:bg-surface-container-low hover:border-primary-container transition-all font-label-md text-label-md text-on-surface-variant hover:text-primary text-left">
+                                                    {pill}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    messages.map((msg, idx) => (
+                                        msg.role === 'user' ? (
+                                            <div key={idx} className="self-end flex gap-3 max-w-[85%] items-end flex-row-reverse animate-[fadeIn_0.3s_ease-out]">
+                                                <div className="bg-primary-container text-on-primary-container rounded-[24px] rounded-br-sm px-6 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.04)] font-body-md text-body-md whitespace-pre-wrap">
+                                                    {msg.content}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div key={idx} className="self-start flex gap-3 max-w-[85%] items-end animate-[fadeIn_0.3s_ease-out]">
+                                                <div className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center flex-shrink-0 border border-outline-variant">
+                                                    <span className="material-symbols-outlined text-sm text-primary">smart_toy</span>
+                                                </div>
+                                                <div className="bg-surface-container-lowest rounded-[24px] rounded-bl-sm px-6 py-4 border border-outline-variant shadow-[0_4px_20px_rgba(0,0,0,0.04)] font-body-md text-body-md flex flex-col gap-2">
+                                                    <div className="prose prose-sm max-w-none text-on-surface markdown" dangerouslySetInnerHTML={renderMarkdown(msg.content)} />
+                                                </div>
+                                            </div>
+                                        )
+                                    ))
+                                )}
+
+                                {isLoading && (
+                                    <div className="self-start flex gap-3 max-w-[85%] items-end">
+                                        <div className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center flex-shrink-0">
+                                            <span className="material-symbols-outlined text-sm text-primary">smart_toy</span>
+                                        </div>
+                                        <div className="bg-surface-container-low rounded-[24px] rounded-bl-sm px-6 py-4 border border-outline-variant/30 flex items-center h-12">
+                                            <div className="dot-flashing ml-3"></div>
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                <div ref={messagesEndRef} />
+                            </div>
+
+                            {/* Input Area */}
+                            <div className="absolute bottom-0 right-0 w-full bg-gradient-to-t from-surface via-surface to-transparent pt-10 pb-6 px-4 md:px-8 flex justify-center z-20 pointer-events-none">
+                                <div className="w-full max-w-[800px] pointer-events-auto">
+                                    <form onSubmit={handleSubmit} className="relative group">
+                                        <textarea 
+                                            ref={textareaRef}
+                                            value={inputValue}
+                                            onChange={handleInput}
+                                            onKeyDown={handleKeyDown}
+                                            className="w-full bg-surface-container-lowest border border-outline-variant rounded-2xl py-4 pl-5 pr-14 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary resize-none shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-shadow" 
+                                            placeholder="Ask a factual question about mutual funds..." 
+                                            rows="1" 
+                                            style={{minHeight: '56px', maxHeight: '120px'}}
+                                        ></textarea>
+                                        <button 
+                                            type="submit"
+                                            disabled={!inputValue.trim() || isLoading} 
+                                            className="absolute right-3 bottom-3 w-10 h-10 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            <span className="material-symbols-outlined">arrow_upward</span>
+                                        </button>
+                                    </form>
+                                    <p className="text-center font-label-sm text-label-sm text-on-surface-variant mt-3">Information provided is for educational purposes only.</p>
+                                </div>
+                            </div>
+                        </main>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

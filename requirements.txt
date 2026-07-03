@@ -1,0 +1,13 @@
+langchain
+langchain-groq
+langchain-huggingface
+langchain-text-splitters
+langchain-chroma
+sentence-transformers
+chromadb
+playwright
+beautifulsoup4
+streamlit
+python-dotenv
+fastapi
+uvicorn
