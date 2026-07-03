@@ -1,20 +1,23 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
 
-WORKDIR /app
+# Create a non-root user (required by Hugging Face Spaces)
+RUN useradd -m -u 1000 user
+USER user
+ENV HOME=/home/user \
+    PATH=/home/user/.local/bin:$PATH
 
-# Install system dependencies required for Playwright
-RUN apt-get update && apt-get install -y \
-    wget \
-    gnupg \
-    && rm -rf /var/lib/apt/lists/*
+# Set working directory
+WORKDIR $HOME/app
 
-COPY requirements.txt .
+# Copy the requirements file and install
+COPY --chown=user requirements.txt $HOME/app/
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-RUN pip install --no-cache-dir -r requirements.txt
-RUN playwright install --with-deps chromium
+# Copy the rest of the application
+COPY --chown=user . $HOME/app/
 
-COPY . .
+# Expose the default HF Spaces port
+EXPOSE 7860
 
-EXPOSE 8501
-
-CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Start the FastAPI server using Uvicorn
+CMD ["uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "7860"]
