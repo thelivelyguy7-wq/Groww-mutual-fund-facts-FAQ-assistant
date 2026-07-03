@@ -2,13 +2,22 @@ import streamlit as st
 import sys
 import os
 
+# Streamlit Cloud sqlite3 patch for ChromaDB
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass
+
 # Ensure the src folder is in path
 sys.path.append(os.path.join(os.path.dirname(__file__)))
 
 try:
     from src.rag_pipeline import RAGPipeline
-except ImportError:
-    st.error("RAGPipeline module not found. Ensure you are running this from the project root.")
+except ImportError as e:
+    st.error(f"ImportError while loading RAGPipeline: {e}")
+    st.error("Ensure all dependencies are in requirements.txt and you are running from the project root.")
     st.stop()
 
 st.set_page_config(page_title="Mutual Fund FAQ Assistant", page_icon="📈", layout="centered")
