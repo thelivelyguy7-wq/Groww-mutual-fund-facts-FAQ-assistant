@@ -5,6 +5,14 @@ from fastapi.middleware.cors import CORSMiddleware
 import sys
 import os
 
+# Streamlit Cloud / Docker sqlite3 patch for ChromaDB
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.rag_pipeline import RAGPipeline
 
