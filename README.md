@@ -1,6 +1,6 @@
---
+---
 title: Mutual Fund FAQ
-emoji: ??
+emoji: 📈
 colorFrom: green
 colorTo: blue
 sdk: docker
