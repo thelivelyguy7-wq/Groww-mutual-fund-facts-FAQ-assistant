@@ -19,5 +19,5 @@ COPY --chown=user . $HOME/app/
 # Expose the default HF Spaces port
 EXPOSE 7860
 
-# Start the FastAPI server using Uvicorn
-CMD ["uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "7860"]
+# Start the FastAPI server using Uvicorn with a dynamic port for Railway
+CMD uvicorn src.api:app --host 0.0.0.0 --port ${PORT:-7860}
