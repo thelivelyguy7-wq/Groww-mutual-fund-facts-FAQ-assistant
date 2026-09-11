@@ -58,7 +58,7 @@ class RAGPipeline:
         self.vectorstore = Chroma(persist_directory=DB_DIR, embedding_function=self.embeddings)
         # Phase 6: Cast a wider net for the reranker
         self.retriever = self.vectorstore.as_retriever(search_kwargs={"k": 15})
-        self.llm = ChatGroq(model_name="llama-3.1-8b-instant", temperature=0.0)
+        self.llm = ChatGroq(model_name="openai/gpt-oss-20b", temperature=0.0)
         self.reranker = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2', max_length=512)
         
         self.rewrite_prompt = PromptTemplate(
